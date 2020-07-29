@@ -127,6 +127,10 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+
 # Custom user model
 
 AUTH_USER_MODEL = 'users.User'
@@ -138,3 +142,7 @@ INTERNAL_IPS = [
     '127.0.0.1',
     # ...
 ]
+
+import django_heroku
+django_heroku.settings(locals())
+del DATABASES['default']['OPTIONS']['sslmode']
