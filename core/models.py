@@ -8,7 +8,8 @@ from imagekit.processors import ResizeToFill, ResizeToFit
 class Photo(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="photos")
     favorited_by = models.ManyToManyField(User, related_name="favorites")
-    caption = models.TextField()
+    title = models.CharField(max_length=255)
+    caption = models.TextField(null=True, blank=True)
     uploaded_on = models.DateTimeField(auto_now_add=True)
     is_public = models.BooleanField(default=True)
     is_pinned = models.BooleanField(default=False)
@@ -37,7 +38,7 @@ class Photo(models.Model):
 class Album(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="albums")
     photos = models.ManyToManyField(Photo, related_name="albums")
-    cover_photo = models.ForeignKey(Photo, on_delete=models.DO_NOTHING, related_name="cover_for")
+    cover_photo = models.ForeignKey(Photo, on_delete=models.DO_NOTHING, related_name="cover_for", null=True)
     title = models.CharField(max_length=255)
     is_public = models.BooleanField(default=True)
 
