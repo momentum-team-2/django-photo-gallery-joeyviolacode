@@ -4,10 +4,7 @@
 
 
 {% for photo in photos %}
-<p>
-    {{ photo.title }}
-</p>
-<img src="{{ photo.photo_medium.url }}" />
+    <a href="{% url 'show_photo' pk=photo.pk %}"><img src="{{ photo.photo_medium.url }}" /></a>
 {% endfor %}
 
 {% endblock %}

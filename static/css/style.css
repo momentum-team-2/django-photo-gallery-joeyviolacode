@@ -49,10 +49,6 @@ header {
     color: white;
 }
 
-code {
-    white-space: pre-wrap;
-}
-
 .header-box {
     display: flex;
     justify-content: space-between;
@@ -78,32 +74,8 @@ code {
 
 .body-div {
     height: 90%;
-    width: 95%;
+    width: 100%;
     margin: 0 auto;
-}
-
-.qa-body {
-    padding: 10px;
-    width: 85%;
-}
-
-.edit-delete {
-    text-decoration: none;
-    border: 1px solid black;
-    border-radius: 3px;
-    font-size: 12px;
-    color: black;
-    background-color: #dfd1be;
-    margin-right: 5px;
-}
-
-.bottom-just {
-    display: flex;
-}
-
-.qa-body > p {
-    margin-top: 2px;
-    margin-bottom: 2px;
 }
 
 .v-center {
@@ -134,33 +106,15 @@ code {
     justify-content: space-around;
 }
 
-.welcome-el {
-    padding-right: 25px;
-}
 
-.welcome-header {
-    margin-top: 0;
-}
-
-
-
-.question-box {
-    margin: 10px;
-    background-color: #f3e6d2;
-}
-
-
-.question-show {
+.lightbox {
+    /* background-color: rgb(14, 12, 12); */
+    background-color: #212124;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    margin: 0 auto;
+    width: 100%;
+    height: auto;
     display: flex;
-    justify-content: space-between;
-}
-
-.attribution {
-    font-size: 12px;
-    padding-left: 40px;
-}
-
-.icon-a {
-    text-decoration: none;
-    color: black;
+    justify-content: space-around;
 }

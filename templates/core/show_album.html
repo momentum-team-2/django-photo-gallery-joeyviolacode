@@ -6,6 +6,50 @@
 <p>
     {{ album.title }}
 </p>
+{% for photo in album.photos.all %}
+<a href="{% url 'show_photo' pk=photo.pk %}"><img src="{{ photo.photo_medium.url }}" /></a>
+{% endfor %}
 
+<div>
+    <h5>Add or remove photos here:</h5>
+    <div>
+        {% for photo in photos %}
+        <a data-albumid="{{album.pk}}" data-photoid="{{photo.pk}}" class="p-toggler" href="#">
+            <img src="{{ photo.photo_thumbnail.url }}" />
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<script>
+const pTogglerList = document.querySelectorAll(".p-toggler")    
+for (let toggler of pTogglerList) {
+    toggler.addEventListener("click", (e) => {
+        e.preventDefault()
+        const albumPk = toggler.dataset.albumid
+        const photoPk = toggler.dataset.photoid
+        console.log(albumPk + "  " + photoPk)
+        fetch(`/album/${albumPk}/add-photo/${photoPk}`, {
+            method: 'POST'
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data.inAlbum)
+            // if (data.inAlbum) {
+            //     toggler.innerHTML = "&#x2713;"
+            // } else {
+            //     toggler.innerHTML = "&#x25EF;"
+            // }
+        })
+    })
+}
+</script>
 {% endblock %}
 

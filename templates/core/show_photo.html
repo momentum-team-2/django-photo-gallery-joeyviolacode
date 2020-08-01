@@ -2,11 +2,16 @@
 
 {% block content %}
 
-
-<p>
-    {{ photo.title }}
-</p>
-<img src="{{ photo.photo_large.url }}" />
+<div class="lightbox">
+    <div>
+        <img src="{{ photo.photo_large.url }}" />
+    </div>
+</div>
+<div>
+    <p>
+        {{ photo.title }}
+    </p>
+</div>
 
 {% endblock %}
 

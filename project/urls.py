@@ -28,6 +28,7 @@ urlpatterns = [
     path('photo/<int:pk>', core_views.ShowPhoto.as_view(), name="show_photo"),
     path('album/add', core_views.CreateAlbum.as_view(), name="create_album"),
     path('album/<int:pk>', core_views.ShowAlbum.as_view(), name="show_album"),
+    path('album/<int:album_pk>/add-photo/<int:photo_pk>', core_views.TogglePhotoInAlbum.as_view(), name="a_r_photo"),
     path('user/<int:pk>/photos', core_views.ShowUserPhotos.as_view(), name="show_user_photos"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

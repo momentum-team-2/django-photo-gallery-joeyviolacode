@@ -4,6 +4,10 @@ from .forms import AlbumForm, CommentForm, PhotoForm
 from users.models import User
 from django.views import View
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.http import JsonResponse
+
 
 
 # Create your views here.
@@ -59,7 +63,22 @@ class ShowAlbum(View):
     
     def get(self, request, pk):
         album = get_object_or_404(Album, pk=pk)
-        return render(request, "core/show_album.html", {"album": album})
+        photos = Photo.objects.all().filter(owner=request.user).order_by("-uploaded_on")
+        return render(request, "core/show_album.html", {"album": album, "photos": photos})
+
+
+@method_decorator(csrf_exempt, name="dispatch")
+class TogglePhotoInAlbum(View):
+    def post(self, request, album_pk, photo_pk):
+        album = get_object_or_404(Album, pk=album_pk)
+        photo = get_object_or_404(Photo, pk=photo_pk)
+        if photo in album.photos.all():
+            album.photos.remove(photo)
+            return JsonResponse({"inAlbum": False})
+        else:
+            album.photos.add(photo)
+            return JsonResponse({"inAlbum": True})
+
 
 
 class ShowUserPhotos(View):
