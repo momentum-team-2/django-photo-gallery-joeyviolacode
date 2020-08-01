@@ -29,7 +29,7 @@ class Photo(models.Model):
     )
     photo_large = ImageSpecField(
         source="photo",
-        processors=ResizeToFit(600, 600),
+        processors=[ResizeToFit(800, 800)],
         format="JPEG",
         options={"quality": 95},
     )

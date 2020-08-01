@@ -25,6 +25,10 @@ urlpatterns = [
     path('accounts/', include("registration.backends.simple.urls")),
     path('', core_views.ShowPhotos.as_view(), name="list_photos"),
     path('photo/add', core_views.AddPhoto.as_view(), name="add_photo"),
+    path('photo/<int:pk>', core_views.ShowPhoto.as_view(), name="show_photo"),
+    path('album/add', core_views.CreateAlbum.as_view(), name="create_album"),
+    path('album/<int:pk>', core_views.ShowAlbum.as_view(), name="show_album"),
+    path('user/<int:pk>/photos', core_views.ShowUserPhotos.as_view(), name="show_user_photos"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

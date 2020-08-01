@@ -5,7 +5,7 @@ class AlbumForm(ModelForm):
     class Meta:
         model = Album
         fields = [
-            
+            "title"
         ]
 
 class PhotoForm(ModelForm):
