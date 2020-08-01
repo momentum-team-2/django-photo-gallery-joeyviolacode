@@ -1,0 +1,166 @@
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: 100vh;
+    width: 100vw;
+    font-family: 'Playfair Display', serif;
+    /* background-color: #EBD5B3; */
+    background-color: white;
+}
+
+h4 {
+    margin: 5px 10px 5px 10px;
+}
+
+.question-title-top {
+    margin: 5px 10px 5px 10px;
+}
+
+.title-link {
+    text-decoration: none;
+    color: white;
+}
+
+.test-border {
+    border: 1px solid black;
+}
+
+.toggler { 
+    transition: all .3s ease-in-out;
+}
+
+.toggler:hover {
+    transform: scale(1.5);
+}
+
+.button-holder {
+    /* padding-top: 10px;
+    padding-right: 10px; */
+    display: flex;
+    flex-direction: column;
+}
+
+
+header {
+    background-color:#a79f94;
+    height: 10%;
+    margin: 0px 0px;
+    color: white;
+}
+
+code {
+    white-space: pre-wrap;
+}
+
+.header-box {
+    display: flex;
+    justify-content: space-between;
+}
+
+.header-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding-left: 30px;
+}
+
+.header-right a {
+    color: white;
+    padding-right: 30px;
+}
+
+.header-p {
+    font-weight: bold;
+    font-size: 28px;
+    margin-bottom: 0;
+}
+
+.body-div {
+    height: 90%;
+    width: 95%;
+    margin: 0 auto;
+}
+
+.qa-body {
+    padding: 10px;
+    width: 85%;
+}
+
+.edit-delete {
+    text-decoration: none;
+    border: 1px solid black;
+    border-radius: 3px;
+    font-size: 12px;
+    color: black;
+    background-color: #dfd1be;
+    margin-right: 5px;
+}
+
+.bottom-just {
+    display: flex;
+}
+
+.qa-body > p {
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.v-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.v-space {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.flex-space {
+    display: flex;
+    justify-content: space-between;
+}
+
+.flex-v-space {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.center {
+    display: flex;
+    justify-content: space-around;
+}
+
+.welcome-el {
+    padding-right: 25px;
+}
+
+.welcome-header {
+    margin-top: 0;
+}
+
+
+
+.question-box {
+    margin: 10px;
+    background-color: #f3e6d2;
+}
+
+
+.question-show {
+    display: flex;
+    justify-content: space-between;
+}
+
+.attribution {
+    font-size: 12px;
+    padding-left: 40px;
+}
+
+.icon-a {
+    text-decoration: none;
+    color: black;
+}

@@ -12,12 +12,16 @@ class PhotoForm(ModelForm):
     class Meta:
         model = Photo
         fields = [
-
+            "title",
+            "caption",
+            "is_public",
+            "is_pinned",
+            "photo",
         ]
 
 class CommentForm(ModelForm):
     class Meta:
         model = Comment
         fields = [
-            
+            "body",
         ]

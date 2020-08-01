@@ -7,7 +7,7 @@ from imagekit.processors import ResizeToFill, ResizeToFit
 # Create your models here.
 class Photo(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="photos")
-    favorited_by = models.ManyToManyField(User, related_name="favorites")
+    favorited_by = models.ManyToManyField(User, related_name="favorites", blank=True)
     title = models.CharField(max_length=255)
     caption = models.TextField(null=True, blank=True)
     uploaded_on = models.DateTimeField(auto_now_add=True)

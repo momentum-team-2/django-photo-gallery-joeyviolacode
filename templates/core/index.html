@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+{% for photo in photos %}
+<p>
+    {{ photo.title }}
+</p>
+<img src="{{ photo.photo_medium.url }}" />
+{% endfor %}
+
+{% endblock %}

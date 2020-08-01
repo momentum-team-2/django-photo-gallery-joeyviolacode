@@ -16,10 +16,16 @@ Including another URLconf
 from django.contrib import admin
 from django.conf import settings
 from django.urls import include, path
+from core import views as core_views
+from django.conf.urls.static import static
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-]
+    path('accounts/', include("registration.backends.simple.urls")),
+    path('', core_views.ShowPhotos.as_view(), name="list_photos"),
+    path('photo/add', core_views.AddPhoto.as_view(), name="add_photo"),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     import debug_toolbar
