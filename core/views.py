@@ -12,7 +12,6 @@ from django.http import JsonResponse
 
 # Create your views here.
 class ShowPhotos(View):
-        
     def get(self, request):
         user = request.user
         photos = Photo.objects.all().order_by("-uploaded_on")
@@ -20,7 +19,6 @@ class ShowPhotos(View):
 
 
 class AddPhoto(View):
-    
     def get(self, request):
         form = PhotoForm()
         return render(request, 'core/add_photo.html', {"form" : form})
@@ -35,16 +33,15 @@ class AddPhoto(View):
 
 
 class ShowPhoto(View):
-
     def get(self, request, pk):
         photo = get_object_or_404(Photo, pk=pk)
-        return render(request, "core/show_photo.html", {"photo": photo})
+        form = CommentForm()
+        return render(request, "core/show_photo.html", {"photo": photo, "form": form})
 
     
 
 #  Change this to start from a picture, so that picture can be the cover.  Need to add PK later.
-class CreateAlbum(View):
-    
+class CreateAlbum(View): 
     def get(self, request):
         form = AlbumForm()
         return render(request, 'core/create_album.html', {"form" : form})
@@ -60,11 +57,16 @@ class CreateAlbum(View):
 
 
 class ShowAlbum(View):
-    
     def get(self, request, pk):
         album = get_object_or_404(Album, pk=pk)
         photos = Photo.objects.all().filter(owner=request.user).order_by("-uploaded_on")
         return render(request, "core/show_album.html", {"album": album, "photos": photos})
+
+
+class ListAlbums(View):
+    def get(seldf, request):
+        albums = Album.objects.all()
+        return render(request, 'core/list_albums.html', {"albums": albums})
 
 
 @method_decorator(csrf_exempt, name="dispatch")
@@ -78,6 +80,31 @@ class TogglePhotoInAlbum(View):
         else:
             album.photos.add(photo)
             return JsonResponse({"inAlbum": True})
+
+
+@method_decorator(csrf_exempt, name="dispatch")
+class FavoritePhoto(View):
+    def post(self, request, pk):
+        photo = get_object_or_404(Photo, pk=pk)
+        user = request.user
+        if photo in user.favorites.all():
+            user.favorites.remove(photo)
+            return JsonResponse({"favorite": False})
+        else:
+            user.favorites.add(photo)
+            return JsonResponse({"favorite": True})
+
+
+class AddComment(View):
+    def post(self, request, pk):
+        photo = get_object_or_404(Photo, pk=pk)
+        form = CommentForm(data=request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.photo = photo
+            comment.owner = request.user
+            comment.save()
+            return redirect(to="show_photo", pk=pk)
 
 
 

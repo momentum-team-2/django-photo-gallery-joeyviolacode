@@ -8,10 +8,57 @@
     </div>
 </div>
 <div>
-    <p>
+    <h4>
         {{ photo.title }}
+    </h4>
+    <p>
+        This photo has been favorited by {{photo.favorited_by.count}} people.
+        <a data-photopk="{{photo.pk}}" class="icon-a toggler" href="#">
+            {% if photo in request.user.favorites.all %}
+            &#x2605;
+            {% else %}
+            &#x2606;
+            {% endif %}
+        </a>
+
     </p>
+    <div class="comments">
+        {% for comment in photo.comments.all %}
+            <div class="comment">
+                <p>{{ comment.body }}</p>
+            </div>
+        {% endfor %}
+        <div class="comment-form">
+            <form action="{% url 'add_comment' pk=photo.pk %}" method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div>
+                    <button type="submit">Add Comment</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
+
+<script>
+const toggler = document.querySelector(".toggler")
+toggler.addEventListener("click", (e) => {
+    e.preventDefault()
+    const photoPk = toggler.dataset.photopk
+    fetch(`/photo/${photoPk}/fave`, {
+        method: 'POST'
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.favorite) {
+            toggler.innerHTML = "&#x2605;"
+        } else {
+            toggler.innerHTML = "&#x2606;"
+        }
+    })
+})
+
+</script>
 {% endblock %}
 

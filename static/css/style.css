@@ -9,8 +9,20 @@ body {
     background-color: white;
 }
 
+.dn {
+    display: none;
+}
+
 h4 {
     margin: 5px 10px 5px 10px;
+}
+
+.home-link {
+    color: white;
+}
+
+a {
+    text-decoration: none;
 }
 
 .question-title-top {
@@ -117,4 +129,18 @@ header {
     height: auto;
     display: flex;
     justify-content: space-around;
+}
+
+.darken {
+    filter: grayscale(85%);
+}
+
+
+.icon-a {
+    text-decoration: none;
+    color: black;
+}
+
+.pin {
+    color: black;
 }

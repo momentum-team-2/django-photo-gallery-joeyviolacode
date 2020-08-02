@@ -11,15 +11,21 @@
 {% endfor %}
 
 <div>
-    <h5>Add or remove photos here:</h5>
-    <div>
-        {% for photo in photos %}
-        <a data-albumid="{{album.pk}}" data-photoid="{{photo.pk}}" class="p-toggler" href="#">
-            <img src="{{ photo.photo_thumbnail.url }}" />
-        </a>
-        {% endfor %}
+{% if request.user == album.owner %}
+    <button action="#" class="edit-album-button">Edit Album</button>
+    <div class="edit-album-panel dn">
+        <h5>Add or remove photos here:</h5>
+        <div>
+            {% for photo in photos %}
+            <a data-albumid="{{album.pk}}" data-photoid="{{photo.pk}}" 
+                class="p-toggler {%if photo in album.photos.all%} darken {% endif %}" href="#">
+                <img src="{{ photo.photo_thumbnail.url }}" />
+            </a>
+            {% endfor %}
+        </div>
     </div>
 </div>
+{% endif %}
 
 
 
@@ -42,14 +48,22 @@ for (let toggler of pTogglerList) {
         .then(res => res.json())
         .then(data => {
             console.log(data.inAlbum)
-            // if (data.inAlbum) {
-            //     toggler.innerHTML = "&#x2713;"
-            // } else {
-            //     toggler.innerHTML = "&#x25EF;"
-            // }
+            if (data.inAlbum) {
+                toggler.classList.add("darken")
+            } else {
+                toggler.classList.remove("darken")
+            }
         })
     })
 }
+
+const editAlbumButton = document.querySelector(".edit-album-button")
+const editAlbumDiv = document.querySelector(".edit-album-panel")
+editAlbumButton.addEventListener("click", (e) => {
+    console.log("clicked.")
+    e.preventDefault()
+    editAlbumDiv.classList.remove("dn")
+    editAlbumButton.classList.add("dn")
+})
 </script>
 {% endblock %}
-
