@@ -6,16 +6,18 @@
 <p>
     {{ album.title }}
 </p>
-{% for photo in album.photos.all %}
-<a href="{% url 'show_photo' pk=photo.pk %}"><img src="{{ photo.photo_medium.url }}" /></a>
-{% endfor %}
+<div class="photo-list">
+    {% for photo in album.photos.all %}
+    <a href="{% url 'show_photo' pk=photo.pk %}"><img src="{{ photo.photo_medium.url }}" /></a>
+    {% endfor %}
+</div>
 
 <div>
 {% if request.user == album.owner %}
     <button action="#" class="edit-album-button">Edit Album</button>
     <div class="edit-album-panel dn">
         <h5>Add or remove photos here:</h5>
-        <div>
+        <div class="photo-list">
             {% for photo in photos %}
             <a data-albumid="{{album.pk}}" data-photoid="{{photo.pk}}" 
                 class="p-toggler {%if photo in album.photos.all%} darken {% endif %}" href="#">

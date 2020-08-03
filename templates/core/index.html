@@ -5,6 +5,7 @@
 {% if request.user.is_authenticated %}
 <div>
     <a href="{% url 'add_photo' %}">Add a photo!</a>
+    <a href="{% url 'list_albums' %}">See all albums</a>
 </div>
 {% endif %}
 <div class="photo-list">

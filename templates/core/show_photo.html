@@ -29,6 +29,7 @@
                 <p>{{ comment.body }}</p>
             </div>
         {% endfor %}
+        {% if user.is_authenticated %}
         <div class="comment-form">
             <form action="{% url 'add_comment' pk=photo.pk %}" method="POST">
                 {% csrf_token %}
@@ -38,6 +39,7 @@
                 </div>
             </form>
         </div>
+        {% endif %}
     </div>
 </div>
 

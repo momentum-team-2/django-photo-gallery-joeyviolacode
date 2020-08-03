@@ -2,12 +2,14 @@
 
 {% block content %}
 
-
+<div class="photo-list">
 {% for album in albums %}
-<div>
-    <a href="{% url 'show_album' pk=album.pk %}"><img src="{{ album.cover_photo.photo_thumbnail.url }}" /></a>
-    <p>{{album.title}}</p>
-</div>
+    <div>
+        <a href="{% url 'show_album' pk=album.pk %}"><img src="{{ album.cover_photo.photo_thumbnail.url }}" /></a>
+        <p>{{album.title}} by {{ album.owner.username }}</p>
+    </div>
 {% endfor %}
+</div>
+
 
 {% endblock %}

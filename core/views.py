@@ -65,7 +65,7 @@ class CreateAlbum(View):
     def get(self, request, pk):
         form = AlbumForm()
         photo = get_object_or_404(Photo, pk=pk)
-        if bool(Photo.objects.filter(owner=user, pk=pk).count()):
+        if bool(Photo.objects.filter(owner=request.user, pk=pk).count()):
             return render(request, 'core/create_album.html', {"form" : form, "photo": photo})
         else: 
             return redirect(to="show_photo", pk=pk)
@@ -79,6 +79,7 @@ class CreateAlbum(View):
             album.cover_photo = photo
             album.save()
             album.photos.add(photo)
+            album.save()
         return redirect(to="show_album", pk=album.pk)
 
 
