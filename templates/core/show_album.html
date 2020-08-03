@@ -24,37 +24,37 @@
 
 
 <script>
-// Adds clickability to photos in edit panel so they can be added/removed from 
-// album without page refresh
-const pTogglerList = document.querySelectorAll(".p-toggler")    
-for (let toggler of pTogglerList) {
-    toggler.addEventListener("click", (e) => {
-        e.preventDefault()
-        const albumPk = toggler.dataset.albumid
-        const photoPk = toggler.dataset.photoid
-        console.log(albumPk + "  " + photoPk)
-        fetch(`/album/${albumPk}/add-photo/${photoPk}`, {
-            method: 'POST'
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.inAlbum) {
-                toggler.classList.add("darken")
-            } else {
-                toggler.classList.remove("darken")
-            }
-        })
-    })
-}
+// // Adds clickability to photos in edit panel so they can be added/removed from 
+// // album without page refresh
+// const pTogglerList = document.querySelectorAll(".p-toggler")    
+// for (let toggler of pTogglerList) {
+//     toggler.addEventListener("click", (e) => {
+//         e.preventDefault()
+//         const albumPk = toggler.dataset.albumid
+//         const photoPk = toggler.dataset.photoid
+//         console.log(albumPk + "  " + photoPk)
+//         fetch(`/album/${albumPk}/add-photo/${photoPk}`, {
+//             method: 'POST'
+//         })
+//         .then(res => res.json())
+//         .then(data => {
+//             if (data.inAlbum) {
+//                 toggler.classList.add("darken")
+//             } else {
+//                 toggler.classList.remove("darken")
+//             }
+//         })
+//     })
+// }
 
 // Shows the edit panel upon click.
-const editAlbumButton = document.querySelector(".edit-album-button")
-const editAlbumDiv = document.querySelector(".edit-album-panel")
-editAlbumButton.addEventListener("click", (e) => {
-    console.log("clicked.")
-    e.preventDefault()
-    editAlbumDiv.classList.remove("dn")
-    editAlbumButton.classList.add("dn")
-})
-</script>
+// const editAlbumButton = document.querySelector(".edit-album-button")
+// const editAlbumDiv = document.querySelector(".edit-album-panel")
+// editAlbumButton.addEventListener("click", (e) => {
+//     console.log("clicked.")
+//     e.preventDefault()
+//     editAlbumDiv.classList.remove("dn")
+//     editAlbumButton.classList.add("dn")
+// })
+// </script>
 {% endblock %}

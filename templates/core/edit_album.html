@@ -6,39 +6,39 @@
 <p>
     {{ album.title }}
 </p>
-<div class="photo-list">
+<div class="photo-list in-album">
     {% for photo in album.photos.all %}
-    <a href="{% url 'show_photo' pk=photo.pk %}"><img class="photo" src="{{ photo.photo_thumbnail.url }}" /></a>
-    {% endfor %}
+    <a data-albumid="{{album.pk}}" data-photoid="{{photo.pk}}" 
+        class="p-toggler" href="#">
+    <img class="photo" src="{{ photo.photo_thumbnail.url }}" />
+</a>    {% endfor %}
 </div>
 
 <div>
 {% if request.user == album.owner %}
     <div class="edit-album-panel">
         <h5>Add or remove photos here:</h5>
-        <div class="photo-list">
-            {% for photo in photos %}
+        <div class="photo-list not-in-album">
+            {% for photo in photos%}
+            {% if photo not in album.photos.all %}
             <a data-albumid="{{album.pk}}" data-photoid="{{photo.pk}}" 
-                class="p-toggler {%if photo in album.photos.all%} darken {% endif %}" href="#">
+                class="p-toggler" href="#">
                 <img class="photo" src="{{ photo.photo_thumbnail.url }}" />
             </a>
+            {% endif %}
             {% endfor %}
         </div>
     </div>
 </div>
 {% endif %}
 
-
-
-
-
-
-
-
 <script>
 // Adds clickability to photos in edit panel so they can be added/removed from 
 // album without page refresh
-const pTogglerList = document.querySelectorAll(".p-toggler")    
+const pTogglerList = document.querySelectorAll(".p-toggler")
+const inAlbumDiv = document.querySelector(".in-album")
+const notInAlbumDiv = document.querySelector(".not-in-album")
+
 for (let toggler of pTogglerList) {
     toggler.addEventListener("click", (e) => {
         e.preventDefault()
@@ -51,22 +51,25 @@ for (let toggler of pTogglerList) {
         .then(res => res.json())
         .then(data => {
             if (data.inAlbum) {
-                toggler.classList.add("darken")
+                console.log(data.inAlbum)
+                inAlbumDiv.append(toggler)
             } else {
-                toggler.classList.remove("darken")
+                //toggler.classList.remove("darken")
+                console.log(data.inAlbum)
+                notInAlbumDiv.append(toggler)
             }
         })
     })
 }
 
-// Shows the edit panel upon click.
-const editAlbumButton = document.querySelector(".edit-album-button")
-const editAlbumDiv = document.querySelector(".edit-album-panel")
-editAlbumButton.addEventListener("click", (e) => {
-    console.log("clicked.")
-    e.preventDefault()
-    editAlbumDiv.classList.remove("dn")
-    editAlbumButton.classList.add("dn")
-})
+// // Shows the edit panel upon click.
+// const editAlbumButton = document.querySelector(".edit-album-button")
+// const editAlbumDiv = document.querySelector(".edit-album-panel")
+// editAlbumButton.addEventListener("click", (e) => {
+//     console.log("clicked.")
+//     e.preventDefault()
+//     editAlbumDiv.classList.remove("dn")
+//     editAlbumButton.classList.add("dn")
+// })
 </script>
 {% endblock %}
