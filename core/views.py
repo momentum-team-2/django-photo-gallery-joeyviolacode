@@ -83,11 +83,18 @@ class CreateAlbum(View):
         return redirect(to="show_album", pk=album.pk)
 
 
+class EditAlbum(View):
+    def get(self, request, pk):
+        album = get_object_or_404(Album, pk=pk)
+        photos = Photo.objects.all().filter(owner=request.user).order_by("-uploaded_on")
+        return render(request, "core/edit_album.html", {"album": album, "photos": photos})
+
+
 class ShowAlbum(View):
     def get(self, request, pk):
         album = get_object_or_404(Album, pk=pk)
         photos = Photo.objects.all().filter(owner=request.user).order_by("-uploaded_on")
-        return render(request, "core/show_album.html", {"album": album, "photos": photos})
+        return render(request, "core/show_album.html", {"album": album})
 
 
 class ListAlbums(View):

@@ -1,9 +1,9 @@
 from django.db import models
 from users.models import User
 from imagekit.models import ImageSpecField
-from imagekit.processors import ResizeToFill, ResizeToFit
+from imagekit.processors import ResizeToFill, ResizeToFit, Transpose
 
-
+#Keep transpose in?  I don't know....
 # Create your models here.
 class Photo(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="photos")
@@ -23,7 +23,7 @@ class Photo(models.Model):
     )
     photo_medium = ImageSpecField(
         source="photo",
-        processors=[ResizeToFit(400, 400)],
+        processors=[ResizeToFit(300, 300)],
         format="JPEG",
         options={"quality": 90},
     )

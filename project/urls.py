@@ -29,6 +29,7 @@ urlpatterns = [
     path('photo/<int:pk>/delete', core_views.DeletePhoto.as_view(), name="delete_photo"),
     path('album/add/<int:pk>', core_views.CreateAlbum.as_view(), name="create_album"),
     path('album/<int:pk>', core_views.ShowAlbum.as_view(), name="show_album"),
+    path('album/<int:pk>/edit', core_views.EditAlbum.as_view(), name="edit_album"),
     path('albums', core_views.ListAlbums.as_view(), name="list_albums"),
     path('photo/<int:pk>/add-comment', core_views.AddComment.as_view(), name="add_comment"),
     path('photo/<int:pk>/fave', core_views.FavoritePhoto.as_view(), name="photo_favorite"),

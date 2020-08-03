@@ -6,14 +6,29 @@
 <div>
     <a href="{% url 'add_photo' %}">Add a photo!</a>
     <a href="{% url 'list_albums' %}">See all albums</a>
+    <a href=# class="shuffler">Shuffle photos</a>
 </div>
 {% endif %}
 <div class="photo-list">
 {% for photo in photos %}
-    <div class="photo">
-        <a href="{% url 'show_photo' pk=photo.pk %}"><img src="{{ photo.photo_medium.url }}" /></a>
+    <div >
+        <a href="{% url 'show_photo' pk=photo.pk %}"><img class="photo" src="{{ photo.photo_medium.url }}" /></a>
     </div>
 {% endfor %}
 </div>
 
+
+<script>
+//This script allows for a button to shuffle all pictures in the list so as to allow the user
+//to see the pictures in random order
+const shuffler = document.querySelector(".shuffler")
+const deck = document.querySelector(".photo-list")
+shuffler.addEventListener("click", (e) => {
+    e.preventDefault()
+    console.log("Clicked Shuffler")
+    for (let i = deck.children.length; i >= 0; i--) {
+        deck.appendChild(deck.children[Math.random() * i | 0])
+    }
+})
+</script>
 {% endblock %}

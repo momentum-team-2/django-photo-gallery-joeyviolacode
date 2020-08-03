@@ -156,4 +156,5 @@ header {
 .photo {
     border: 1px solid black;
     margin: 5px 0;
+    height: auto;
 }
