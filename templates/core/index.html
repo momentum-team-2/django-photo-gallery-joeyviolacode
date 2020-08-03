@@ -2,9 +2,17 @@
 
 {% block content %}
 
-
+{% if request.user.is_authenticated %}
+<div>
+    <a href="{% url 'add_photo' %}">Add a photo!</a>
+</div>
+{% endif %}
+<div class="photo-list">
 {% for photo in photos %}
-    <a href="{% url 'show_photo' pk=photo.pk %}"><img src="{{ photo.photo_medium.url }}" /></a>
+    <div class="photo">
+        <a href="{% url 'show_photo' pk=photo.pk %}"><img src="{{ photo.photo_medium.url }}" /></a>
+    </div>
 {% endfor %}
+</div>
 
 {% endblock %}

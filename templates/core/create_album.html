@@ -3,7 +3,11 @@
 
 {% block content %}
 <div>
-    <form action="{% url 'create_album' %}" method="POST">
+    <h4>Start a new album!</h4>
+</div>
+<img src="{{ photo.photo_medium.url }}" />
+<div>
+    <form action="{% url 'create_album' pk=photo.pk %}" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
         <div>

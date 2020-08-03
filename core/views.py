@@ -7,6 +7,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+
+
 
 
 
@@ -14,10 +18,15 @@ from django.http import JsonResponse
 class ShowPhotos(View):
     def get(self, request):
         user = request.user
-        photos = Photo.objects.all().order_by("-uploaded_on")
+        #photos = Photo.objects.all().order_by("-uploaded_on")
+        if request.user.is_authenticated:
+            photos = Photo.objects.all().filter(Q(owner=request.user)| Q(is_public = True)).order_by("-uploaded_on")
+        else:
+            photos = Photo.objects.all().filter(is_public=True)
         return render(request, 'core/index.html', {"photos" : photos})
 
 
+@method_decorator(login_required, name="dispatch")
 class AddPhoto(View):
     def get(self, request):
         form = PhotoForm()
@@ -35,25 +44,42 @@ class AddPhoto(View):
 class ShowPhoto(View):
     def get(self, request, pk):
         photo = get_object_or_404(Photo, pk=pk)
+        photos = Photo.objects.all()
         form = CommentForm()
         return render(request, "core/show_photo.html", {"photo": photo, "form": form})
 
-    
 
-#  Change this to start from a picture, so that picture can be the cover.  Need to add PK later.
+@method_decorator(login_required, name="dispatch")
+class DeletePhoto(View):
+    def get(self, request, pk):
+        photo = get_object_or_404(Photo, pk=pk)
+        if request.user == photo.owner:
+            photo.delete()
+            return redirect(to="show_user_photos", pk=request.user.pk)
+        else: 
+            return redirect(to="show_photo", pk=pk)
+
+
+@method_decorator(login_required, name="dispatch")
 class CreateAlbum(View): 
-    def get(self, request):
+    def get(self, request, pk):
         form = AlbumForm()
-        return render(request, 'core/create_album.html', {"form" : form})
+        photo = get_object_or_404(Photo, pk=pk)
+        if bool(Photo.objects.filter(owner=user, pk=pk).count()):
+            return render(request, 'core/create_album.html', {"form" : form, "photo": photo})
+        else: 
+            return redirect(to="show_photo", pk=pk)
 
-    def post(self, request):
+    def post(self, request, pk):
         form = AlbumForm(data=request.POST)
+        photo = get_object_or_404(Photo, pk=pk)
         if form.is_valid():
             album = form.save(commit=False)
             album.owner = request.user
+            album.cover_photo = photo
             album.save()
-            pk = album.pk
-        return redirect(to="show_album", pk=pk)
+            album.photos.add(photo)
+        return redirect(to="show_album", pk=album.pk)
 
 
 class ShowAlbum(View):
@@ -69,6 +95,7 @@ class ListAlbums(View):
         return render(request, 'core/list_albums.html', {"albums": albums})
 
 
+@method_decorator(login_required, name="dispatch")
 @method_decorator(csrf_exempt, name="dispatch")
 class TogglePhotoInAlbum(View):
     def post(self, request, album_pk, photo_pk):
@@ -94,7 +121,7 @@ class FavoritePhoto(View):
             user.favorites.add(photo)
             return JsonResponse({"favorite": True})
 
-
+@method_decorator(login_required, name="dispatch")
 class AddComment(View):
     def post(self, request, pk):
         photo = get_object_or_404(Photo, pk=pk)
@@ -105,7 +132,6 @@ class AddComment(View):
             comment.owner = request.user
             comment.save()
             return redirect(to="show_photo", pk=pk)
-
 
 
 class ShowUserPhotos(View):

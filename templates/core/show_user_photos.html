@@ -2,15 +2,15 @@
 
 {% block content %}
 
-
-{% for photo in photos %}
-<h3>Here are {{ photos.first.owner.username}}'s photos
+<h3>
+    Here are {{ photos.first.owner.username}}'s photos
 </h3>
-
-<p>
-    {{ photo.title }}
-</p>
-<img src="{{ photo.photo_medium.url }}" />
-{% endfor %}
+<div class="photo-list">
+    {% for photo in photos %}
+    <div class="photo">
+        <a href="{% url 'show_photo' pk=photo.pk %}"><img src="{{ photo.photo_medium.url }}" /></a>
+    </div>
+    {% endfor %}
+</div>
 
 {% endblock %}

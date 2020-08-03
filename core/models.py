@@ -19,19 +19,19 @@ class Photo(models.Model):
         source="photo",
         processors=[ResizeToFit(200, 200)],
         format="JPEG",
-        options={"quality": 60},
+        options={"quality": 85},
     )
     photo_medium = ImageSpecField(
         source="photo",
         processors=[ResizeToFit(400, 400)],
         format="JPEG",
-        options={"quality": 80},
+        options={"quality": 90},
     )
     photo_large = ImageSpecField(
         source="photo",
         processors=[ResizeToFit(800, 800)],
         format="JPEG",
-        options={"quality": 95},
+        options={"quality": 100},
     )
 
     def __str__(self):

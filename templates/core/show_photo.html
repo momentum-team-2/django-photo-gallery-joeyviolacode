@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-
 <div class="lightbox">
     <div>
         <img src="{{ photo.photo_large.url }}" />
@@ -9,10 +8,13 @@
 </div>
 <div>
     <h4>
-        {{ photo.title }}
+        {{ photo.title }} taken by <a href="{% url 'show_user_photos' pk=photo.owner.pk %}">{{ photo.owner.username }}</a>
     </h4>
+    {% if request.user == photo.owner %}
+    <a href="{% url 'create_album' pk=photo.pk %}">Start an album with this photo!</a>
+    <a href="{% url 'delete_photo' pk=photo.pk%}">Delete photo</a>
+    {% endif %}
     <p>
-        This photo has been favorited by {{photo.favorited_by.count}} people.
         <a data-photopk="{{photo.pk}}" class="icon-a toggler" href="#">
             {% if photo in request.user.favorites.all %}
             &#x2605;
@@ -20,7 +22,6 @@
             &#x2606;
             {% endif %}
         </a>
-
     </p>
     <div class="comments">
         {% for comment in photo.comments.all %}
