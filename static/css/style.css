@@ -21,11 +21,11 @@ h4 {
 .home-link {
     color: white;
 }
-
+/* 
 a {
     text-decoration: none;
     color: black;
-}
+} */
 
 img {
     display: block;
@@ -262,4 +262,8 @@ header {
 .just-right {
     display: flex;
     justify-content: space-between;
+}
+
+.wrap {
+    flex-wrap: wrap;
 }

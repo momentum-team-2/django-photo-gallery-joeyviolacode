@@ -14,7 +14,7 @@
 <div class="indent">
     <h5>Photos currently in album (click to remove):</h5>
 </div>
-<div class="edit-list in-album">
+<div class="edit-list in-album center wrap">
     {% for photo in album.photos.all %}
     <a data-albumid="{{album.pk}}" data-photoid="{{photo.pk}}" 
         class="p-toggler" href="#">
@@ -28,7 +28,7 @@
         <div class="indent">
             <h5>Add or remove photos here:</h5>
         </div>
-        <div class="edit-list not-in-album">
+        <div class="edit-list not-in-album center wrap">
             {% for photo in photos%}
             {% if photo not in album.photos.all %}
             <a data-albumid="{{album.pk}}" data-photoid="{{photo.pk}}" 
@@ -41,36 +41,66 @@
     </div>
 </div>
 {% endif %}
+{% endblock %}
 
+{% block scripts %}
 <script>
-// Adds clickability to photos in edit panel so they can be added/removed from 
-// album without page refresh
-const pTogglerList = document.querySelectorAll(".p-toggler")
-const inAlbumDiv = document.querySelector(".in-album")
-const notInAlbumDiv = document.querySelector(".not-in-album")
 
-for (let toggler of pTogglerList) {
-    toggler.addEventListener("click", (e) => {
-        e.preventDefault()
-        const albumPk = toggler.dataset.albumid
-        const photoPk = toggler.dataset.photoid
-        console.log(albumPk + "  " + photoPk)
-        fetch(`/album/${albumPk}/add-photo/${photoPk}`, {
+dragula([
+    document.querySelector(".in-album"),
+    document.querySelector(".not-in-album")
+  ])
+  .on('drop', (el, target, source, sibling) => {
+    if (target === source) {
+        console.log("Dropped in same box.")
+      return null
+    } 
+    console.log("Dropped in different box.")
+    const photoPk = el.dataset.photoid
+    const albumPk = el.dataset.albumid
+    fetch(`/album/${albumPk}/add-photo/${photoPk}`, {
             method: 'POST'
         })
         .then(res => res.json())
         .then(data => {
             if (data.inAlbum) {
                 console.log(data.inAlbum)
-                inAlbumDiv.append(toggler)
             } else {
-                //toggler.classList.remove("darken")
                 console.log(data.inAlbum)
-                notInAlbumDiv.append(toggler)
             }
         })
-    })
-}
+})
+  
+
+
+// // Adds clickability to photos in edit panel so they can be added/removed from 
+// // album without page refresh
+// const pTogglerList = document.querySelectorAll(".p-toggler")
+// const inAlbumDiv = document.querySelector(".in-album")
+// const notInAlbumDiv = document.querySelector(".not-in-album")
+
+// for (let toggler of pTogglerList) {
+//     toggler.addEventListener("click", (e) => {
+//         e.preventDefault()
+//         const albumPk = toggler.dataset.albumid
+//         const photoPk = toggler.dataset.photoid
+//         console.log(albumPk + "  " + photoPk)
+//         fetch(`/album/${albumPk}/add-photo/${photoPk}`, {
+//             method: 'POST'
+//         })
+//         .then(res => res.json())
+//         .then(data => {
+//             if (data.inAlbum) {
+//                 console.log(data.inAlbum)
+//                 inAlbumDiv.append(toggler)
+//             } else {
+//                 //toggler.classList.remove("darken")
+//                 console.log(data.inAlbum)
+//                 notInAlbumDiv.append(toggler)
+//             }
+//         })
+//     })
+// }
 
 // // Shows the edit panel upon click.
 // const editAlbumButton = document.querySelector(".edit-album-button")
