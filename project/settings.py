@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'registration',
     'django_extensions',
     "imagekit",
+    "rest_framework",
  #   "storages",
 
     # Project-specific

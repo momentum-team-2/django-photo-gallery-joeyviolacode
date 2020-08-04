@@ -4,11 +4,11 @@
 
 {% if request.user == photos.first.owner %}
 <h3 class="indent">
-    Here are your photos:
+    Your photos:
 </h3>
 {% else %}
 <h3 class="indent">
-    Here are {{ photos.first.owner.username}}'s photos:
+    {{ photos.first.owner.username}}'s photos:
 </h3>
 {% endif %}
 <div class="photo-list">
@@ -20,11 +20,11 @@
 </div>
 {% if request.user == photos.first.owner %}
 <h3 class="indent">
-    Here are your albums:
+    Your albums:
 </h3>
 {% else %}
 <h3 class="indent">
-    Here are {{ photos.first.owner.username}}'s albums:
+    {{ photos.first.owner.username}}'s albums:
 </h3>
 {% endif %}
 <div class="photo-list">

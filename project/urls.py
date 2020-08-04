@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.urls import include, path
 from core import views as core_views
+from api import views as api_views
 from django.conf.urls.static import static
 
 
@@ -35,6 +36,11 @@ urlpatterns = [
     path('photo/<int:pk>/fave', core_views.FavoritePhoto.as_view(), name="photo_favorite"),
     path('album/<int:album_pk>/add-photo/<int:photo_pk>', core_views.TogglePhotoInAlbum.as_view(), name="a_r_photo"),
     path('user/<int:pk>/photos', core_views.ShowUserPhotos.as_view(), name="show_user_photos"),
+    path('api-auth/', include('rest_framework.urls')),
+    path('api/photos', api_views.PhotosList.as_view(), name="api_show_photos"),
+    path('api/photos/<int:pk>', api_views.PhotoDetail.as_view(), name="api_photo_detail"),
+    path('api/albums', api_views.AlbumsList.as_view(), name='api_show_albums'),
+    path('api/albums/<int:pk>', api_views.AlbumDetail.as_view(), name="api_album_detail"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

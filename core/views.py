@@ -11,9 +11,6 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
 
-
-
-
 # Create your views here.
 class ShowPhotos(View):
     def get(self, request):

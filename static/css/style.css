@@ -170,7 +170,7 @@ header {
 }
 
 .nav-buttons > a {
-    padding-right: 15px;
+    padding: 0 30px;
     color: black;
 }
 
@@ -209,6 +209,7 @@ header {
 
 .comments {
     width: 40%;
+    padding-bottom: 50px;
 }
 
 .description {
@@ -241,4 +242,24 @@ header {
 .edit-list {
     display: flex;
     justify-content: center;
+}
+
+.photo-add {
+    margin-top: 30px;
+}
+
+.comment-attrib {
+    font-size: 12px;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.comment-text {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.just-right {
+    display: flex;
+    justify-content: space-between;
 }

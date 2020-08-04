@@ -2,13 +2,48 @@
 
 
 {% block content %}
-<div>
-    <form action="{% url 'add_photo' %}" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <div>
-            <button type="submit">Add Photo</button>
-        </div>
-    </form>
+<!-- <div class="center">
+    <h2>Add a photo to your collection:</h2>
+</div>
+<div class="center">
+    <div class="photo-add">
+        <form action="{% url 'add_photo' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div>
+                <button type="submit">Add Photo</button>
+            </div>
+        </form>
+    </div>
+</div> -->
+
+
+<div class="center">
+    <h2>Add a photo to your collection:</h2>
+</div>
+<div class="center">
+    <div class="photo-add">
+        <form action="{% url 'add_photo' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            {{form.photo.errors}}
+            <p>
+                {{form.photo.label}}: {{ form.photo }}
+            </p>
+            {{form.title.errors}}
+            <p>
+                {{form.title.label}}:  {{form.title}}
+            </p>
+            {{form.caption.errors}}
+            <p>
+               Tell everyone something about your photo:
+            </p>
+            <p>{{form.caption}}</p>
+            <p>Is your photo public?  {{form.is_public}}</p>
+            <div>                
+                <button type="submit">Add Photo</button>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock content%}

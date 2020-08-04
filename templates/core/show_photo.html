@@ -33,7 +33,13 @@
         <div class="comments">
             {% for comment in photo.comments.all %}
                 <div class="comment">
-                    <p>{{ comment.body }}</p>
+                    <p class="comment-text">{{ comment.body }}</p>
+                    <div class="flex-between">
+                        <div></div>
+                        <a href="{% url 'show_user_photos' pk=comment.owner.pk %}">
+                            <span class="comment-attrib">by {{comment.owner.username}}</span>
+                        </a>
+                    </div>
                 </div>
             {% endfor %}
             {% if user.is_authenticated %}
