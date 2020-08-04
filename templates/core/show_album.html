@@ -2,20 +2,21 @@
 
 {% block content %}
 
-
-<p>
-    {{ album.title }}
-</p>
+<div class="center">
+    <h2>
+        {{ album.title }}
+    </h2>
+</div>
+{% if album.owner == request.user %}
+<div class="center">
+    <a href="{% url 'edit_album' pk=album.pk %}">(edit album)</a>
+</div>
+{% endif %}
 <div class="photo-list">
     {% for photo in album.photos.all %}
     <a href="{% url 'show_photo' pk=photo.pk %}"><img class="photo" src="{{ photo.photo_medium.url }}" /></a>
     {% endfor %}
 </div>
-
-{% if request.user == album.owner %}
-    <a href="{% url 'edit_album' pk=album.pk %}">Edit Album</button>
-{% endif %}
-
 
 
 

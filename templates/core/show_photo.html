@@ -55,10 +55,17 @@
             <div class="desc">
                 <span>This photo is in {{photo.albums.count}} album{{photo.albums.count|pluralize}}.</span>
             </div>
-            <div>
+            <div class="flex">
                 {% for album in photo.albums.all %}
-                <div>
-                    <a href="{% url 'show_album' pk=album.pk %}"><img src="{{album.cover_photo.photo_tiny.url}}"><span>{{album.title}}  </span></a>
+                <div class="m10">
+                    <a href="{% url 'show_album' pk=album.pk %}">
+                        <div class="center">
+                            <img src="{{album.cover_photo.photo_tiny.url}}">
+                        </div>
+                        <div class="center">
+                            <span>{{album.title}}</span>
+                        </div>
+                    </a>
                 </div>
                 {% endfor %}
             </div>

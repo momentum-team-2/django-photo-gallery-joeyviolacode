@@ -3,27 +3,37 @@
 {% block content %}
 
 
-<p>
-    {{ album.title }}
-</p>
-<div class="photo-list in-album">
+<div class="center">
+    <h2>
+        {{ album.title }}
+    </h2>
+</div>
+<div class="center">
+    <a href="{% url 'show_album' pk=album.pk %}">(return to album)</a>
+</div>
+<div class="indent">
+    <h5>Photos currently in album (click to remove):</h5>
+</div>
+<div class="edit-list in-album">
     {% for photo in album.photos.all %}
     <a data-albumid="{{album.pk}}" data-photoid="{{photo.pk}}" 
         class="p-toggler" href="#">
-    <img class="photo" src="{{ photo.photo_thumbnail.url }}" />
+    <img class="photo m10" src="{{ photo.photo_thumbnail.url }}" />
 </a>    {% endfor %}
 </div>
 
 <div>
 {% if request.user == album.owner %}
     <div class="edit-album-panel">
-        <h5>Add or remove photos here:</h5>
-        <div class="photo-list not-in-album">
+        <div class="indent">
+            <h5>Add or remove photos here:</h5>
+        </div>
+        <div class="edit-list not-in-album">
             {% for photo in photos%}
             {% if photo not in album.photos.all %}
             <a data-albumid="{{album.pk}}" data-photoid="{{photo.pk}}" 
                 class="p-toggler" href="#">
-                <img class="photo" src="{{ photo.photo_thumbnail.url }}" />
+                <img class="photo m10" src="{{ photo.photo_thumbnail.url }}" />
             </a>
             {% endif %}
             {% endfor %}

@@ -86,8 +86,11 @@ class CreateAlbum(View):
 class EditAlbum(View):
     def get(self, request, pk):
         album = get_object_or_404(Album, pk=pk)
-        photos = Photo.objects.all().filter(owner=request.user).order_by("-uploaded_on")
-        return render(request, "core/edit_album.html", {"album": album, "photos": photos})
+        if request.user == album.owner:
+            photos = Photo.objects.all().filter(owner=request.user).order_by("-uploaded_on")
+            return render(request, "core/edit_album.html", {"album": album, "photos": photos})
+        else:
+            return redirect(to="show_album", pk=pk)
 
 
 class ShowAlbum(View):
@@ -109,12 +112,15 @@ class TogglePhotoInAlbum(View):
     def post(self, request, album_pk, photo_pk):
         album = get_object_or_404(Album, pk=album_pk)
         photo = get_object_or_404(Photo, pk=photo_pk)
-        if photo in album.photos.all():
-            album.photos.remove(photo)
-            return JsonResponse({"inAlbum": False})
+        if request.user == album.owner:
+            if photo in album.photos.all():
+                album.photos.remove(photo)
+                return JsonResponse({"inAlbum": False})
+            else:
+                album.photos.add(photo)
+                return JsonResponse({"inAlbum": True})
         else:
-            album.photos.add(photo)
-            return JsonResponse({"inAlbum": True})
+            return redirect(to="show_album", pk=album_pk)
 
 
 @method_decorator(csrf_exempt, name="dispatch")
@@ -146,4 +152,5 @@ class ShowUserPhotos(View):
     def get(self, request, pk):
         user = get_object_or_404(User, pk=pk)
         photos = user.photos.all().order_by("-uploaded_on")
-        return render(request, "core/show_user_photos.html", {"photos":photos})
+        albums = user.albums.all()
+        return render(request, "core/show_user_photos.html", {"photos":photos, "albums": albums})

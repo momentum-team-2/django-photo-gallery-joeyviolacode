@@ -3,9 +3,11 @@
 {% block content %}
 
 {% if request.user == photos.first.owner %}
-<h3>Here are your photos:</h3>
+<h3 class="indent">
+    Here are your photos:
+</h3>
 {% else %}
-<h3>
+<h3 class="indent">
     Here are {{ photos.first.owner.username}}'s photos:
 </h3>
 {% endif %}
@@ -16,5 +18,24 @@
     </div>
     {% endfor %}
 </div>
-
+{% if request.user == photos.first.owner %}
+<h3 class="indent">
+    Here are your albums:
+</h3>
+{% else %}
+<h3 class="indent">
+    Here are {{ photos.first.owner.username}}'s albums:
+</h3>
+{% endif %}
+<div class="photo-list">
+    {% for album in albums %}
+    <div>
+        <a href="{% url 'show_album' pk=album.pk %}"><img src="{{album.cover_photo.photo_thumbnail.url}}">
+            <div class="center">
+                <span>{{album.title}}  </span>
+            </div>
+        </a>
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}
