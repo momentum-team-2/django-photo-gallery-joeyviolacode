@@ -2,9 +2,13 @@
 
 {% block content %}
 
+{% if request.user == photos.first.owner %}
+<h3>Here are your photos:</h3>
+{% else %}
 <h3>
-    Here are {{ photos.first.owner.username}}'s photos
+    Here are {{ photos.first.owner.username}}'s photos:
 </h3>
+{% endif %}
 <div class="photo-list">
     {% for photo in photos %}
     <div class="photo">

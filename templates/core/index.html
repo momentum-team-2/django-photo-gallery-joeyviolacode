@@ -3,10 +3,15 @@
 {% block content %}
 
 {% if request.user.is_authenticated %}
-<div>
-    <a href="{% url 'add_photo' %}">Add a photo!</a>
-    <a href="{% url 'list_albums' %}">See all albums</a>
-    <a href=# class="shuffler">Shuffle photos</a>
+<div class="center">
+    <div class="nav-buttons">
+        <a href="{% url 'add_photo' %}">Add a photo!</a>
+        {% if user.is_authenticated %}
+        <a href="{% url 'show_user_photos' pk=request.user.pk %}">See your photos</a>
+        {% endif %}
+        <a href="{% url 'list_albums' %}">See all albums</a>
+        <a href=# class="shuffler">Shuffle photos</a>
+    </div>
 </div>
 {% endif %}
 <div class="photo-list">

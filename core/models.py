@@ -15,6 +15,12 @@ class Photo(models.Model):
     is_pinned = models.BooleanField(default=False)
     
     photo = models.ImageField(upload_to="photos/", null=True, blank=True,)
+    photo_tiny = ImageSpecField(
+        source="photo",
+        processors=[ResizeToFit(50, 50)],
+        format="JPEG",
+        options={"quality": 65},
+    )
     photo_thumbnail = ImageSpecField(
         source="photo",
         processors=[ResizeToFit(200, 200)],

@@ -1,4 +1,4 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, Textarea
 from .models import Album, Photo, Comment
 
 class AlbumForm(ModelForm):
@@ -25,3 +25,9 @@ class CommentForm(ModelForm):
         fields = [
             "body",
         ]
+        widgets = {
+          'body': Textarea(attrs={'rows':4, 'cols':50},),
+        }
+        labels = {
+            "body": ""
+        }
