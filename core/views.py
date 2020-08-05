@@ -55,11 +55,20 @@ class AddPhoto(View):
 
 
 class ShowPhoto(View):
-    def get(self, request, pk):
+    def get(self, request, pk, photo_index=None):
         photo = get_object_or_404(Photo, pk=pk)
-        photos = Photo.objects.all()
+        if photo_index == None:
+            photo_index = list(Photo.objects.all().filter(Q(owner=request.user)| Q(is_public = True)).order_by("-uploaded_on")).index(photo)
+        photos = Photo.objects.all().filter(Q(owner=request.user)| Q(is_public = True)).order_by("-uploaded_on")
+        photo = photos[photo_index]
         form = CommentForm()
-        return render(request, "core/show_photo.html", {"photo": photo, "form": form})
+        prev_index, next_index = find_prev_and_next_index(photos, photo_index)
+        return render(request, "core/show_photo.html", 
+                    {"photo": photo, 
+                     "prev_index" : prev_index,
+                     "next_index" : next_index,
+                     "photo_index": photo_index,
+                     "form": form})
 
 
 class ShowAlbumPhoto(View):
@@ -71,6 +80,25 @@ class ShowAlbumPhoto(View):
         prev_index, next_index = find_prev_and_next_index(album.photos.all(), photo_index)
         return render(request, 'core/show_album_photo.html', 
                     {"album": album,
+                     "photo": photo,
+                     "prev_index" : prev_index,
+                     "next_index" : next_index,
+                     "photo_index": photo_index,
+                     "form": form})
+
+
+class ShowUserPhoto(View):
+    def get(self, request, user_pk, photo_index=0):
+        user = get_object_or_404(User, pk=user_pk)
+        if request.user == user:
+            photo_list = user.photos.all()
+        else: 
+            photo_list = user.photos.all().filter(is_public=True)
+        photo = photo_list[photo_index]
+        form = CommentForm()
+        prev_index, next_index = find_prev_and_next_index(photo_list, photo_index)
+        return render(request, 'core/show_user_photo.html', 
+                    {"user": user,
                      "photo": photo,
                      "prev_index" : prev_index,
                      "next_index" : next_index,

@@ -3,13 +3,13 @@
 {% block content %}
 <div class="lightbox">
     <div class="v-center">
-        <a class="prev arrow" href="{% url 'show_photo' pk=photo.pk photo_index=prev_index%}"><p>←</p></a>
+        <a class="prev arrow" href="{% url 'show_user_photo' user_pk=user.pk photo_index=prev_index%}"><p>←</p></a>
     </div>
     <div>
         <img src="{{ photo.photo_large.url }}" />
     </div>
     <div class="v-center">
-        <a class="next arrow" href="{% url 'show_photo' pk=photo.pk photo_index=next_index%}"><p>→</p></a>
+        <a class="next arrow" href="{% url 'show_user_photo' user_pk=user.pk photo_index=next_index%}"><p>→</p></a>
     </div>
 </div>
 <div class="photo-info">
@@ -104,7 +104,6 @@ toggler.addEventListener("click", (e) => {
     })
 })
 
-
 const nextURL = document.querySelector(".next").getAttribute("href")
 const prevURL = document.querySelector(".prev").getAttribute("href")
 document.addEventListener("keydown", (e) => {
@@ -118,4 +117,3 @@ document.addEventListener("keydown", (e) => {
 })
 </script>
 {% endblock %}
-
