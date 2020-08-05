@@ -2,6 +2,30 @@
 
 {% block content %}
 <div class="lightbox">
+    <div class="v-space sidelight">
+        <div>
+            <a class="return-link" href="{% url 'show_user_photos' pk=photo.owner.pk %}">return to user</a>
+        </div>
+        <div>
+            <div class="v-center">
+                <a class="prev arrow" href="{% url 'show_user_photo' user_pk=user.pk photo_pk=photo.pk photo_index=prev_index%}"><p>←</p></a>
+            </div>
+        </div>
+        <div>
+        </div>
+    </div>
+    <div>
+        <img src="{{ photo.photo_large.url }}" />
+    </div>
+    <div class="v-center sidelight">
+        <div class="flex-right">
+            <div></div>
+            <a class="next arrow" href="{% url 'show_user_photo' user_pk=user.pk photo_pk=photo.pk photo_index=next_index%}"><p>→</p></a>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="lightbox">
     <div class="v-center">
         <a class="prev arrow" href="{% url 'show_user_photo' user_pk=user.pk photo_pk=photo.pk photo_index=prev_index%}"><p>←</p></a>
     </div>
@@ -11,7 +35,7 @@
     <div class="v-center">
         <a class="next arrow" href="{% url 'show_user_photo' user_pk=user.pk photo_pk=photo.pk photo_index=next_index%}"><p>→</p></a>
     </div>
-</div>
+</div> -->
 <div class="photo-info">
     <div class="info-top flex-between">
         <div class="w20">

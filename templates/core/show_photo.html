@@ -2,14 +2,26 @@
 
 {% block content %}
 <div class="lightbox">
-    <div class="v-center">
-        <a class="prev arrow" href="{% url 'show_photo' pk=photo.pk photo_index=prev_index%}"><p>←</p></a>
+    <div class="v-space sidelight">
+        <div>
+            <a class="return-link" href="{% url 'list_photos' %}">return to photos</a>
+        </div>
+        <div>
+            <div class="v-center">
+                <a class="prev arrow" href="{% url 'show_photo' pk=photo.pk photo_index=prev_index%}"><p>←</p></a>
+            </div>
+        </div>
+        <div>
+        </div>
     </div>
     <div>
         <img src="{{ photo.photo_large.url }}" />
     </div>
-    <div class="v-center">
-        <a class="next arrow" href="{% url 'show_photo' pk=photo.pk photo_index=next_index%}"><p>→</p></a>
+    <div class="v-center sidelight">
+        <div class="flex-right">
+            <div></div>
+            <a class="next arrow" href="{% url 'show_photo' pk=photo.pk photo_index=next_index%}"><p>→</p></a>
+        </div>
     </div>
 </div>
 <div class="photo-info">
