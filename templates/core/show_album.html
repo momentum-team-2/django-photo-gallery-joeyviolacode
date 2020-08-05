@@ -14,7 +14,7 @@
 {% endif %}
 <div class="photo-list">
     {% for photo in album.photos.all %}
-    <a href="{% url 'show_photo' pk=photo.pk %}"><img class="photo" src="{{ photo.photo_medium.url }}" /></a>
+    <a href="{% url 'show_album_photo' album_pk=album.pk %}"><img class="photo" src="{{ photo.photo_medium.url }}" /></a>
     {% endfor %}
 </div>
 

@@ -11,6 +11,22 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
 
+def find_prev_and_next_index(queryset, current_index):
+        set_size = len(queryset)
+        
+        if current_index == 0:
+            prev_index = set_size - 1
+        else:
+            prev_index = current_index - 1
+        
+        if current_index == set_size - 1:
+            next_index = 0
+        else: 
+            next_index = (current_index + 1) % set_size
+
+        return prev_index, next_index
+
+
 # Create your views here.
 class ShowPhotos(View):
     def get(self, request):
@@ -44,6 +60,22 @@ class ShowPhoto(View):
         photos = Photo.objects.all()
         form = CommentForm()
         return render(request, "core/show_photo.html", {"photo": photo, "form": form})
+
+
+class ShowAlbumPhoto(View):
+    #  list(photos).index(photo)
+    def get(self, request, album_pk, photo_index=0):
+        album = get_object_or_404(Album, pk=album_pk)
+        photo = album.photos.all()[photo_index]
+        form = CommentForm()
+        prev_index, next_index = find_prev_and_next_index(album.photos.all(), photo_index)
+        return render(request, 'core/show_album_photo.html', 
+                    {"album": album,
+                     "photo": photo,
+                     "prev_index" : prev_index,
+                     "next_index" : next_index,
+                     "photo_index": photo_index,
+                     "form": form})
 
 
 @method_decorator(login_required, name="dispatch")

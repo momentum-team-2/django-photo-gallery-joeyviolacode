@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="lightbox">
+    <div class="v-center">
+        <a class="prev arrow" href="{% url 'show_album_photo' album_pk=album.pk photo_index=prev_index%}"><p>←</p></a>
+    </div>
+    <div>
+        <img src="{{ photo.photo_large.url }}" />
+    </div>
+    <div class="v-center">
+        <a class="next arrow" href="{% url 'show_album_photo' album_pk=album.pk photo_index=next_index%}"><p>→</p></a>
+    </div>
+</div>
+<div class="photo-info">
+    <div class="info-top flex-between">
+        <div class="w20">
+            <span>
+               <strong>"{{ photo.title }}"</strong> taken by <a href="{% url 'show_user_photos' pk=photo.owner.pk %}">{{ photo.owner.username }}</a>
+            <span>
+        </div>
+        <div class="flex-between w20">
+            {% if request.user == photo.owner %}
+            <a href="{% url 'create_album' pk=photo.pk %}">Start album</a>
+            <a href="{% url 'delete_photo' pk=photo.pk%}">Delete photo</a>
+            {% endif %}
+        </div>
+        <div class="w20 justify-right">
+            <a data-photopk="{{photo.pk}}" class="icon-a toggler" href="#">
+                {% if photo in request.user.favorites.all %}
+                &#x2605;
+                {% else %}
+                &#x2606;
+                {% endif %}
+            </a>
+        </div>
+    </div>
+    <div class="info-bottom">
+        <div class="comments">
+            {% for comment in photo.comments.all %}
+                <div class="comment">
+                    <p class="comment-text">{{ comment.body }}</p>
+                    <div class="flex-between">
+                        <div></div>
+                        <a href="{% url 'show_user_photos' pk=comment.owner.pk %}">
+                            <span class="comment-attrib">by {{comment.owner.username}}</span>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+            {% if user.is_authenticated %}
+            <div class="comment-form">
+                <form action="{% url 'add_comment' pk=photo.pk %}" method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div>
+                        <button type="submit">Add Comment</button>
+                    </div>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+        <div class="albums">
+            <div class="description">
+               <span>{{photo.caption}}</span>
+            </div>
+            <div class="desc">
+                <span>This photo is in {{photo.albums.count}} album{{photo.albums.count|pluralize}}.</span>
+            </div>
+            <div class="flex">
+                {% for album in photo.albums.all %}
+                <div class="m10">
+                    <a href="{% url 'show_album' pk=album.pk %}">
+                        <div class="center">
+                            <img src="{{album.cover_photo.photo_tiny.url}}">
+                        </div>
+                        <div class="center">
+                            <span>{{album.title}}</span>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+const toggler = document.querySelector(".toggler")
+toggler.addEventListener("click", (e) => {
+    e.preventDefault()
+    const photoPk = toggler.dataset.photopk
+    fetch(`/photo/${photoPk}/fave`, {
+        method: 'POST'
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.favorite) {
+            toggler.innerHTML = "&#x2605;"
+        } else {
+            toggler.innerHTML = "&#x2606;"
+        }
+    })
+})
+
+const nextURL = document.querySelector(".next").getAttribute("href")
+const prevURL = document.querySelector(".prev").getAttribute("href")
+document.addEventListener("keydown", (e) => {
+    if (e.keyCode === 39) {
+        console.log("doing fetch next")
+        location.href = nextURL
+ } else if (e.keyCode === 37) {
+        console.log("doing fetch back")
+        location.href = prevURL
+    }
+})
+</script>
+{% endblock %}

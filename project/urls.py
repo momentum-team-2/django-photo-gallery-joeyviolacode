@@ -36,6 +36,8 @@ urlpatterns = [
     path('photo/<int:pk>/fave', core_views.FavoritePhoto.as_view(), name="photo_favorite"),
     path('album/<int:album_pk>/add-photo/<int:photo_pk>', core_views.TogglePhotoInAlbum.as_view(), name="a_r_photo"),
     path('user/<int:pk>/photos', core_views.ShowUserPhotos.as_view(), name="show_user_photos"),
+    path('album/<int:album_pk>/photo/<int:photo_index>', core_views.ShowAlbumPhoto.as_view(), name="show_album_photo"),
+    path('album/<int:album_pk>/photo', core_views.ShowAlbumPhoto.as_view(), name="show_album_photo"),
     path('api-auth/', include('rest_framework.urls')),
     path('api/photos', api_views.PhotosList.as_view(), name="api_show_photos"),
     path('api/photos/<int:pk>', api_views.PhotoDetail.as_view(), name="api_photo_detail"),
