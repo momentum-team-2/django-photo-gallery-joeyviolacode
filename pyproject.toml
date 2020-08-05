@@ -18,6 +18,8 @@ pillow = "^7.2.0"
 django-imagekit = "^4.0.2"
 django-registration-redux = "^2.8"
 djangorestframework = "^3.11.0"
+boto3 = "^1.14.35"
+django-storages = "^1.9.1"
 
 [tool.poetry.dev-dependencies]
 

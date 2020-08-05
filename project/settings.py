@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     'django_extensions',
     "imagekit",
     "rest_framework",
- #   "storages",
+   "storages",
 
     # Project-specific
     'users',
@@ -156,14 +156,16 @@ INTERNAL_IPS = [
     # ...
 ]
 
-# if env("USE_EMAIL"):
-#     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-#     EMAIL_HOST = env("EMAIL_HOST")
-#     EMAIL_PORT = env("EMAIL_PORT")
-#     EMAIL_HOST_USER = env("EMAIL_HOST_USER")
-#     EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
-#     EMAIL_USE_TLS = True
-#     EMAIL_USE_SSL = False
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+if env("USE_EMAIL"):
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = env("EMAIL_HOST")
+    EMAIL_PORT = env("EMAIL_PORT")
+    EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+    EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+    EMAIL_USE_TLS = True
+    EMAIL_USE_SSL = False
 
 
 ACCOUNT_ACTIVATION_DAYS = 14
@@ -180,16 +182,17 @@ REST_FRAMEWORK = {
 }
 
 
-# if env("USE_S3"):
-#     AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
-#     AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
-#     AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
-#     AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
-#     AWS_S3_OBJECT_PARAMETERS = {
-#         "CacheControl": "max-age=86400",
-#     }
+if env("USE_S3"):
+    AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
+    AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
+    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+    AWS_S3_OBJECT_PARAMETERS = {
+        "CacheControl": "max-age=86400",
+    }
+    DEFAULT_FILE_STORAGE = "project.storage_backends.MediaStorage"
 
-#DEFAULT_FILE_STORAGE = "project.storage_backends.MediaStorage"
+
 
 import django_heroku
 django_heroku.settings(locals())
