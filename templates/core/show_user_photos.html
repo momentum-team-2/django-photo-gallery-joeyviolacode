@@ -14,7 +14,7 @@
 <div class="photo-list">
     {% for photo in photos %}
     <div class="photo">
-        <a href="{% url 'show_user_photo' user_pk=photos.first.owner.pk %}"><img src="{{ photo.photo_medium.url }}" /></a>
+        <a href="{% url 'show_user_photo' user_pk=photos.first.owner.pk photo_pk=photo.pk %}"><img src="{{ photo.photo_medium.url }}" /></a>
     </div>
     {% endfor %}
 </div>

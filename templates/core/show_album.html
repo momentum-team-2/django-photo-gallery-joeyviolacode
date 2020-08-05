@@ -4,7 +4,7 @@
 
 <div class="center">
     <h2>
-        {{ album.title }}
+        "{{ album.title }}" by <a href="{% url 'show_user_photos' pk=album.owner.pk %}">{{album.owner.username}}</a>
     </h2>
 </div>
 {% if album.owner == request.user %}
@@ -13,8 +13,8 @@
 </div>
 {% endif %}
 <div class="photo-list">
-    {% for photo in album.photos.all %}
-    <a href="{% url 'show_album_photo' album_pk=album.pk %}"><img class="photo" src="{{ photo.photo_medium.url }}" /></a>
+    {% for photo in photos %}
+    <a href="{% url 'show_album_photo' album_pk=album.pk photo_pk=photo.pk %}"><img class="photo" src="{{ photo.photo_medium.url }}" /></a>
     {% endfor %}
 </div>
 

@@ -31,7 +31,6 @@ def find_prev_and_next_index(queryset, current_index):
 class ShowPhotos(View):
     def get(self, request):
         user = request.user
-        #photos = Photo.objects.all().order_by("-uploaded_on")
         if request.user.is_authenticated:
             photos = Photo.objects.all().filter(Q(owner=request.user)| Q(is_public = True)).order_by("-uploaded_on")
         else:
@@ -57,9 +56,12 @@ class AddPhoto(View):
 class ShowPhoto(View):
     def get(self, request, pk, photo_index=None):
         photo = get_object_or_404(Photo, pk=pk)
+        if request.user.is_authenticated:
+            photos = Photo.objects.all().filter(Q(owner=request.user)| Q(is_public = True)).order_by("-uploaded_on")
+        else:
+            photos = Photo.objects.all().filter(is_public=True).order_by("-uploaded_on")
         if photo_index == None:
-            photo_index = list(Photo.objects.all().filter(Q(owner=request.user)| Q(is_public = True)).order_by("-uploaded_on")).index(photo)
-        photos = Photo.objects.all().filter(Q(owner=request.user)| Q(is_public = True)).order_by("-uploaded_on")
+            photo_index = list(photos).index(photo)
         photo = photos[photo_index]
         form = CommentForm()
         prev_index, next_index = find_prev_and_next_index(photos, photo_index)
@@ -71,13 +73,21 @@ class ShowPhoto(View):
                      "form": form})
 
 
+#Need to incorporate photo pk so a photo will show correctly on entry to lightbox
 class ShowAlbumPhoto(View):
     #  list(photos).index(photo)
-    def get(self, request, album_pk, photo_index=0):
+    def get(self, request, album_pk, photo_pk, photo_index=None):
+        photo = get_object_or_404(Photo, pk=photo_pk)
         album = get_object_or_404(Album, pk=album_pk)
-        photo = album.photos.all()[photo_index]
+        if request.user.is_authenticated:
+            photos = album.photos.all().filter(Q(owner=request.user)| Q(is_public = True)).order_by("-uploaded_on")
+        else:
+            photos = album.photos.all().filter(is_public=True).order_by("-uploaded_on")          
+        if photo_index == None:
+            photo_index=list(photos).index(photo)
+        photo = photos[photo_index]
         form = CommentForm()
-        prev_index, next_index = find_prev_and_next_index(album.photos.all(), photo_index)
+        prev_index, next_index = find_prev_and_next_index(photos, photo_index)
         return render(request, 'core/show_album_photo.html', 
                     {"album": album,
                      "photo": photo,
@@ -87,16 +97,20 @@ class ShowAlbumPhoto(View):
                      "form": form})
 
 
+#Need to incorporate photo pk so a photo will show correctly on entry to lightbox
 class ShowUserPhoto(View):
-    def get(self, request, user_pk, photo_index=0):
+    def get(self, request, user_pk, photo_pk, photo_index=None):
+        photo = get_object_or_404(Photo, pk=photo_pk)
         user = get_object_or_404(User, pk=user_pk)
-        if request.user == user:
-            photo_list = user.photos.all()
-        else: 
-            photo_list = user.photos.all().filter(is_public=True)
-        photo = photo_list[photo_index]
+        if request.user.is_authenticated:
+            photos = user.photos.all().filter(Q(owner=request.user)| Q(is_public = True)).order_by("-uploaded_on")
+        else:
+            photos = user.photos.all().filter(is_public=True).order_by("-uploaded_on")        
+        if photo_index == None:
+            photo_index=list(photos).index(photo)
+        photo = photos[photo_index]
         form = CommentForm()
-        prev_index, next_index = find_prev_and_next_index(photo_list, photo_index)
+        prev_index, next_index = find_prev_and_next_index(photos, photo_index)
         return render(request, 'core/show_user_photo.html', 
                     {"user": user,
                      "photo": photo,
@@ -153,12 +167,15 @@ class EditAlbum(View):
 class ShowAlbum(View):
     def get(self, request, pk):
         album = get_object_or_404(Album, pk=pk)
-        photos = Photo.objects.all().filter(owner=request.user).order_by("-uploaded_on")
-        return render(request, "core/show_album.html", {"album": album})
+        if request.user.is_authenticated:
+            photos = album.photos.all().filter(Q(owner=request.user)| Q(is_public = True)).order_by("-uploaded_on")
+        else:
+            photos = album.photos.all().filter(is_public = True).order_by("-uploaded_on")
+        return render(request, "core/show_album.html", {"album": album, "photos": photos})
 
 
 class ListAlbums(View):
-    def get(seldf, request):
+    def get(self, request):
         albums = Album.objects.all()
         return render(request, 'core/list_albums.html', {"albums": albums})
 
