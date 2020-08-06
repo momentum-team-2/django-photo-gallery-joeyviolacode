@@ -12,29 +12,28 @@ from django.db.models import Q
 
 
 def find_prev_and_next_index(queryset, current_index):
-        set_size = len(queryset)
-        
+        set_size = len(queryset)        
         if current_index == 0:
             prev_index = set_size - 1
         else:
             prev_index = current_index - 1
-        
-        # if current_index == set_size - 1:
-        #     next_index = 0
-        # else: 
         next_index = (current_index + 1) % set_size
-
         return prev_index, next_index
+
+
+def filter_visible_photos(queryset, request):
+    if request.user.is_authenticated:
+        photos = queryset.filter(Q(owner=request.user)| Q(is_public = True)).order_by("-uploaded_on")
+    else: 
+        photos = queryset.filter(is_public=True)
+    return photos
 
 
 # Create your views here.
 class ShowPhotos(View):
     def get(self, request):
         user = request.user
-        if request.user.is_authenticated:
-            photos = Photo.objects.all().filter(Q(owner=request.user)| Q(is_public = True)).order_by("-uploaded_on")
-        else:
-            photos = Photo.objects.all().filter(is_public=True)
+        photos = filter_visible_photos(Photo.objects.all(), request)
         return render(request, 'core/index.html', {"photos" : photos})
 
 
@@ -56,10 +55,7 @@ class AddPhoto(View):
 class ShowPhoto(View):
     def get(self, request, pk, photo_index=None):
         photo = get_object_or_404(Photo, pk=pk)
-        if request.user.is_authenticated:
-            photos = Photo.objects.all().filter(Q(owner=request.user)| Q(is_public = True)).order_by("-uploaded_on")
-        else:
-            photos = Photo.objects.all().filter(is_public=True).order_by("-uploaded_on")
+        photos = filter_visible_photos(Photo.objects.all(), request)
         if photo_index == None:
             photo_index = list(photos).index(photo)
         photo = photos[photo_index]
@@ -79,12 +75,7 @@ class ShowAlbumPhoto(View):
     def get(self, request, album_pk, photo_pk, photo_index=None):
         photo = get_object_or_404(Photo, pk=photo_pk)
         album = get_object_or_404(Album, pk=album_pk)
-        
-        if request.user.is_authenticated:
-            photos = album.photos.all().filter(Q(owner=request.user)| Q(is_public = True)).order_by("-uploaded_on")
-        else:
-            photos = album.photos.all().filter(is_public=True).order_by("-uploaded_on")          
-        
+        photos = filter_visible_photos(album.photos.all(), request)
         if photo_index == None:
             photo_index=list(photos).index(photo)
         photo = photos[photo_index]
@@ -103,12 +94,7 @@ class ShowUserPhoto(View):
     def get(self, request, user_pk, photo_pk, photo_index=None):
         photo = get_object_or_404(Photo, pk=photo_pk)
         user = get_object_or_404(User, pk=user_pk)
-        
-        if request.user.is_authenticated:
-            photos = user.photos.all().filter(Q(owner=request.user)| Q(is_public = True)).order_by("-uploaded_on")
-        else:
-            photos = user.photos.all().filter(is_public=True).order_by("-uploaded_on")        
-        
+        photos = filter_visible_photos(user.photos.all(), request)
         if photo_index == None:
             photo_index=list(photos).index(photo)
         photo = photos[photo_index]
@@ -228,9 +214,6 @@ class AddComment(View):
 class ShowUserPhotos(View):
     def get(self, request, pk):
         user = get_object_or_404(User, pk=pk)
-        if request.user.is_authenticated:
-            photos = user.photos.all().filter(Q(owner=request.user)| Q(is_public = True)).order_by("-uploaded_on")
-        else:
-            photos = user.photos.all().filter(is_public=True)
+        photos = filter_visible_photos(user.photos.all(), request)
         albums = user.albums.all()
         return render(request, "core/show_user_photos.html", {"photos":photos, "albums": albums})
