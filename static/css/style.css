@@ -246,6 +246,8 @@ header {
 .edit-list {
     display: flex;
     justify-content: center;
+    min-width: 500px;
+    min-height: 100px;
 }
 
 .photo-add {
