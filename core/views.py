@@ -29,7 +29,6 @@ def filter_visible_photos(queryset, request):
     return photos
 
 
-# Create your views here.
 class ShowPhotos(View):
     def get(self, request):
         user = request.user
@@ -51,14 +50,16 @@ class AddPhoto(View):
             photo.save()
         return redirect(to="list_photos")
 
+#zzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 
 class ShowPhoto(View):
     def get(self, request, pk, photo_index=None):
-        photo = get_object_or_404(Photo, pk=pk)
         photos = filter_visible_photos(Photo.objects.all(), request)
         if photo_index == None:
+            photo = get_object_or_404(Photo, pk=pk)
             photo_index = list(photos).index(photo)
-        photo = photos[photo_index]
+        else: 
+            photo = photos[photo_index]
         form = CommentForm()
         prev_index, next_index = find_prev_and_next_index(photos, photo_index)
         return render(request, "core/show_photo.html", 
@@ -71,14 +72,14 @@ class ShowPhoto(View):
 
 #can be reorganized a bit regarding initial pk and the None check
 class ShowAlbumPhoto(View):
-    #  list(photos).index(photo)
     def get(self, request, album_pk, photo_pk, photo_index=None):
-        photo = get_object_or_404(Photo, pk=photo_pk)
         album = get_object_or_404(Album, pk=album_pk)
         photos = filter_visible_photos(album.photos.all(), request)
         if photo_index == None:
+            photo = get_object_or_404(Photo, pk=photo_pk)
             photo_index=list(photos).index(photo)
-        photo = photos[photo_index]
+        else:
+            photo = photos[photo_index]
         form = CommentForm()
         prev_index, next_index = find_prev_and_next_index(photos, photo_index)
         return render(request, 'core/show_album_photo.html', 
@@ -92,12 +93,13 @@ class ShowAlbumPhoto(View):
 
 class ShowUserPhoto(View):
     def get(self, request, user_pk, photo_pk, photo_index=None):
-        photo = get_object_or_404(Photo, pk=photo_pk)
         user = get_object_or_404(User, pk=user_pk)
         photos = filter_visible_photos(user.photos.all(), request)
         if photo_index == None:
+            photo = get_object_or_404(Photo, pk=photo_pk)
             photo_index=list(photos).index(photo)
-        photo = photos[photo_index]
+        else: 
+            photo = photos[photo_index]
         form = CommentForm()
         prev_index, next_index = find_prev_and_next_index(photos, photo_index)
         return render(request, 'core/show_user_photo.html', 
